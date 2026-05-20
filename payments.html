@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gym Management System | Payments</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,500;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="assets/css/styles.css" rel="stylesheet" />
+</head>
+<body data-page="payments">
+  <div class="app-shell">
+    <aside class="app-sidebar offcanvas offcanvas-start offcanvas-lg" tabindex="-1" id="sidebarMenu">
+      <div class="offcanvas-header d-lg-none">
+        <h5 class="offcanvas-title">Menu</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body p-0">
+        <div class="sidebar-content">
+          <div class="brand">
+            <img class="brand-logo" src="assets/images/st_jym_logo.png" alt="ST JYM logo" />
+            <div>
+              <div class="brand-title">ST JYM</div>
+              <div class="brand-subtitle">Gym Manager</div>
+            </div>
+          </div>
+          <nav class="nav flex-column app-nav">
+            <a class="nav-link" href="index.html">Dashboard</a>
+            <a class="nav-link" href="members.html">Members</a>
+            <a class="nav-link" href="memberships.html">Memberships</a>
+            <a class="nav-link" href="payments.html">Payments</a>
+            <a class="nav-link" href="attendance.html">Attendance</a>
+            <a class="nav-link" href="support.html">Support & Reviews</a>
+          </nav>
+          <div class="sidebar-card">
+            <h6 class="text-uppercase">Revenue Goal</h6>
+            <p>$18,000 target by month end.</p>
+            <button class="btn btn-outline-light btn-sm">Adjust Goal</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="app-main">
+      <header class="app-header">
+        <div>
+          <div class="eyebrow">Payments</div>
+          <h1 class="page-title">Billing & Collections</h1>
+          <p class="page-subtitle">Track membership payments and overdue balances.</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-ghost menu-toggle d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
+            <span class="menu-icon" aria-hidden="true"></span>
+            Menu
+          </button>
+          <button class="btn btn-ghost">Send Reminders</button>
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentModal">Record Payment</button>
+          <button class="btn btn-outline-light logout-btn" type="button">Logout</button>
+        </div>
+      </header>
+
+      <section class="row g-4">
+        <div class="col-12 col-xl-4">
+          <div class="panel">
+            <h2 class="panel-title">Collection Progress</h2>
+            <p class="panel-subtitle" id="collectionSubtitle">Monthly target achieved.</p>
+            <div class="progress progress-sleek">
+              <div class="progress-bar" id="collectionProgress" style="width: 0%">0%</div>
+            </div>
+            <div class="mt-4">
+              <div class="metric-row">
+                <span>Collected</span>
+                <strong id="paymentsCollected">$0.00</strong>
+              </div>
+              <div class="metric-row">
+                <span>Outstanding</span>
+                <strong id="paymentsOutstanding">$0.00</strong>
+              </div>
+              <div class="metric-row">
+                <span>Overdue</span>
+                <strong id="paymentsOverdue">$0.00</strong>
+              </div>
+            </div>
+          </div>
+          <div class="panel mt-4">
+            <h2 class="panel-title">Payment Methods</h2>
+            <ul class="list-unstyled payment-list">
+              <li>
+                <span>Card Payments</span>
+                <strong id="methodCard">0%</strong>
+              </li>
+              <li>
+                <span>Bank Transfer</span>
+                <strong id="methodTransfer">0%</strong>
+              </li>
+              <li>
+                <span>Cash</span>
+                <strong id="methodCash">0%</strong>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-12 col-xl-8">
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">Recent Payments</h2>
+                <p class="panel-subtitle">Latest transactions and status.</p>
+              </div>
+              <button class="btn btn-sm btn-outline-light">Export</button>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-ice" id="paymentTable">
+                <thead>
+                  <tr>
+                    <th>Member</th>
+                    <th>Plan</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modal-ice">
+        <div class="modal-header">
+          <h5 class="modal-title">Record Payment</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="paymentForm">
+            <input type="hidden" id="paymentId" />
+            <div class="mb-3">
+              <label class="form-label">Member ID</label>
+              <input class="form-control" id="paymentMemberId" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Amount</label>
+              <input type="number" step="0.01" class="form-control" id="paymentAmount" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Payment Date</label>
+              <input type="datetime-local" class="form-control" id="paymentDate" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Method</label>
+              <select class="form-select" id="paymentMethod">
+                <option value="Card">Card</option>
+                <option value="Cash">Cash</option>
+                <option value="Transfer">Transfer</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Status</label>
+              <select class="form-select" id="paymentStatus">
+                <option value="paid">Paid</option>
+                <option value="pending">Pending</option>
+                <option value="overdue">Overdue</option>
+              </select>
+            </div>
+            <button class="btn btn-primary w-100" type="submit">Save Payment</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
